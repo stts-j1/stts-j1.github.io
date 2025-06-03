@@ -1,0 +1,1461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<script src="bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script> 
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"> -->
+
+<link rel="icon" href="./assets/logo.png" type="image/png">
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 查找所有 cite 元素
+        var cites = document.querySelectorAll("cite");
+        var footnoteMap = {}; // 用于跟踪脚注的映射
+
+        cites.forEach(function(cite, index) {
+            var citeContent = cite.innerHTML.trim();
+            var footnoteId;
+            if (footnoteMap[citeContent]) {
+                footnoteId = footnoteMap[citeContent];
+            }else{
+                // 创建新的脚注ID
+                footnoteId = (Object.keys(footnoteMap).length + 1);
+                footnoteMap[citeContent] = footnoteId;
+    
+                // 创建新的脚注内容
+                var footnote = document.createElement("li");
+                footnote.innerHTML = "<b>[" + (Object.keys(footnoteMap).length) + "]</b> " + citeContent;
+                footnote.id = footnoteId;
+                document.getElementById("footnotes-list").appendChild(footnote);
+            }
+
+            // 在原位置添加引用编号
+            var sup = document.createElement("sup");
+            var a = document.createElement("a");
+            a.href = "#" + footnoteId;
+            a.innerHTML = "[" + footnoteId + "]";
+            sup.appendChild(a);
+            cite.parentNode.insertBefore(sup, cite.nextSibling);
+
+            // 隐藏原始的 cite 标签
+            cite.style.display = "none";
+        });
+    });
+</script>
+
+<style type="text/css">
+    body {
+        font-family: "Times New Roman", "Titillium Web", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+        font-weight: 300;
+        font-size: 17px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    @media screen and (min-width: 980px){
+        body {
+            width: 980px;
+        }
+    }
+    
+    h1 {
+        font-weight:300;
+        line-height: 1.15em;
+    }
+    
+    h2 {
+        font-size: 1.75em;
+    }
+    a:link,a:visited {
+        color: #5364cc;
+        text-decoration: none;
+    }
+    a:hover {
+        color: #208799;
+    }
+    h1 {
+        text-align: center;
+    }
+    h2,h3 {
+        text-align: left;
+    }
+    
+    h1 {
+        font-size: 40px;
+        font-weight: 500;
+    }
+    h2 {
+        font-weight: 400;
+        margin: 16px 0px 4px 0px;
+    }
+    h3 {
+        font-weight: 600;
+        margin: 16px 0px 4px 0px;
+    }
+    
+    .paper-title {
+        padding: 1px 0px 1px 0px;
+    }
+    section {
+        margin: 32px 0px 32px 0px;
+        text-align: justify;
+        clear: both;
+    }
+    .col-5 {
+         width: 20%;
+         float: left;
+    }
+    .col-4 {
+         width: 25%;
+         float: left;
+    }
+    .col-3 {
+         width: 33%;
+         float: left;
+    }
+    .col-2 {
+         width: 50%;
+         float: left;
+    }
+    .col-1 {
+         width: 100%;
+         float: left;
+    }
+    
+    .author-row, .affil-row {
+        font-size: 26px;
+    }
+    
+    .author-row-new { 
+        text-align: center; 
+    }
+    
+    .author-row-new a {
+        display: inline-block;
+        font-size: 20px;
+        padding: 4px;
+    }
+    
+    .author-row-new sup {
+        color: #313436;
+        font-size: 12px;
+    }
+    
+    .affiliations-new {
+        font-size: 18px;
+        text-align: center;
+        width: 80%;
+        margin: 0 auto;
+        margin-bottom: 20px;
+    }
+    
+    .row {
+        margin: 16px 0px 16px 0px;
+    }
+    .authors {
+        font-size: 26px;
+    }
+    .affiliatons {
+        font-size: 18px;
+    }
+    .affil-row {
+        margin-top: 18px;
+    }
+    .teaser {
+        max-width: 100%;
+    }
+    .text-center {
+        text-align: center;  
+    }
+    .screenshot {
+        width: 256px;
+        border: 1px solid #ddd;
+    }
+    .screenshot-el {
+        margin-bottom: 16px;
+    }
+    hr {
+        height: 1px;
+        border: 0; 
+        border-top: 1px solid #ddd;
+        margin: 0;
+    }
+    .material-icons {
+        vertical-align: -6px;
+    }
+    .material-symbols-outlined{
+        vertical-align: -6px;
+    }
+    p {
+        line-height: 1.25em;
+    }
+    .caption {
+        font-size: 16px;
+        color: #666;
+        margin-top: 4px;
+        margin-bottom: 10px;
+    }
+    
+    
+    video {
+        display: block;
+        margin: auto;
+    }
+    
+    details { background-color: #f0f0f0; } /* 浅灰色背景 */
+    summary { background-color: #FFFFFF; }
+    
+    figure {
+        display: block;
+        margin: auto;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    #bibtex pre {
+        font-size: 14px;
+        background-color: #eee;
+        padding: 16px;
+    }
+    .blue {
+        color: #2c82c9;
+        font-weight: bold;
+    }
+    .orange {
+        color: #d35400;
+        font-weight: bold;
+    }
+    .flex-row {
+        display: flex;
+        flex-flow: row wrap;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    
+    .paper-btn-coming-soon {
+        position: relative; 
+        top: 0;
+        left: 0;
+    }
+    
+    .coming-soon {
+        position: absolute;
+        top: -15px;
+        right: -15px;
+    }
+    
+    
+    .paper-btn {
+      position: relative;
+      text-align: center;
+    
+      display: inline-block;
+      margin: 8px;
+      padding: 8px 8px;
+    
+      border-width: 0;
+      outline: none;
+      border-radius: 2px;
+      
+      background-color: #5364cc;
+      color: white !important;
+      font-size: 20px;
+      width: 100px;
+      font-weight: 600;
+    }
+    .paper-btn-parent {
+        display: flex;
+        justify-content: center;
+        margin: 16px 0px;
+    }
+    
+    .paper-btn:hover {
+        opacity: 0.85;
+    }
+    
+    .container {
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+    
+    .venue {
+        font-size: 23px;
+    }
+    
+    .topnav {
+        background-color: #EEEEEE;
+        overflow: hidden;
+    }
+    
+    .topnav div {
+        max-width: 1070px;
+        margin: 0 auto;
+    }
+    
+    .topnav a {
+        display: inline-block;
+        color: black;
+        text-align: center;
+        vertical-align: middle;
+        padding: 16px 16px;
+        text-decoration: none;
+        font-size: 18px;
+    }
+    
+    .topnav img {
+        padding: 2px 0px;
+        width: 100%;
+        margin: 0.2em 0px 0.3em 0px;
+        vertical-align: middle;
+    }
+    
+    pre {
+        font-size: 0.9em;
+        padding-left: 7px;
+        padding-right: 7px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        border-radius: 3px;
+        background-color: rgb(235, 235, 235);
+        overflow-x: auto;
+    }
+    .download-thumb {
+        display: flex;
+    }
+    
+    @media only screen and (max-width: 620px) {
+        .download-thumb {
+            display: none;
+        }
+    }
+    
+    .paper-stuff {
+        width: 50%;
+        font-size: 20px;
+    }
+    
+    @media only screen and (max-width: 620px) {
+        .paper-stuff {
+            width: 100%;
+        }
+    }
+    * {
+      box-sizing: border-box;
+    }
+    
+    .column {
+      text-align: center;
+      float: left;
+      width: 16.666%;
+      padding: 5px;
+    }
+    .column3 {
+      text-align: center;
+      float: left;
+      width: 33.333%;
+      padding: 5px;
+    }
+    .column4 {
+      text-align: center;
+      float: left;
+      width: 50%;
+      padding: 5px;
+    }
+    .column5 {
+      text-align: center;
+      float: left;
+      width: 20%;
+      padding: 5px;
+    }
+    .border-right {
+        border-right: 1px solid black;
+    }
+    .border-bottom{
+        border-bottom: 1px solid black;
+    }
+    
+    
+    
+    /* Clearfix (clear floats) */
+    .row::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+    .img-fluid {
+      max-width: 100%;
+      height: auto;
+    }
+    .figure-img {
+      margin-bottom: 0.5rem;
+      line-height: 1;
+    }
+    
+    .pdf-object {
+        border: none; /* 移除边框 */
+    }
+    
+    
+    .center-content {
+        text-align: center; /* 确保内容居中 */
+    }
+    
+    .center-content img {
+        margin: 0 auto; /* 水平居中 */
+        display: block; /* 使 img 行为像块级元素 */
+    }
+    
+    .rounded-circle {
+      border-radius: 50% !important;
+    }
+    
+    .red-bold-italic {
+        color: red;        /* 设置文字颜色为红色 */
+        font-weight: bold; /* 设置文字为加粗 */
+        font-style: italic;/* 设置文字为斜体 */
+    }
+    
+    #teaser-image {
+        text-align: center; /* 确保内容居中 */
+    }
+    
+    #teaser-image figure {
+        display: inline-block; /* 使 figure 行为像内联元素，以便居中 */
+        margin: 0 auto; /* 水平居中 */
+    }
+    
+    .image-container {
+        display: flex;
+        flex-direction: row; /* 设置为行布局，使图像水平排列 */
+        justify-content: space-between; /* 在容器中水平分散排列图像 */
+        align-items: center; /* 在容器中垂直居中对齐图像 */
+    }
+    
+    .image-container br {
+        margin-top: 20px; /* 调整间距的大小，根据需要进行调整 */
+    }
+    
+    #table-of-contents {
+        position: fixed; /* 固定位置 */
+        left: 20px;     /* 距离窗口右边缘20px */
+        top: 50px;      /* 距离窗口顶部100px */
+        width: 200px;    /* 目录的宽度 */
+        background-color: white; /* 背景色 */
+        padding: 10px;   /* 内边距 */
+        border: 1px solid #ddd; /* 边框样式 */
+        box-shadow: 0px 0px 10px #ddd; /* 阴影效果 */
+        z-index: 1000;   /* 确保目录在最顶层 */
+    }
+    
+    #table-of-contents h2 {
+        margin-top: 0; /* 移除标题的顶部外边距 */
+    }
+    
+    #table-of-contents ul {
+        list-style-type: none; /* 去除列表符号 */
+        padding: 0; /* 去除内边距 */
+    }
+    
+    #table-of-contents li {
+        margin-bottom: 10px; /* 列表项之间的间距 */
+    }
+    
+    #table-of-contents a {
+        text-decoration: none; /* 移除链接下划线 */
+        color: #000; /* 设置链接颜色 */
+    }
+    
+    #table-of-contents a:hover {
+        text-decoration: underline; /* 鼠标悬停时添加下划线 */
+    }
+    
+    .active-link {
+        color: blue; /* 设置活跃链接的颜色为蓝色 */
+    }
+    
+    /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+    @media screen and (max-width: 500px) {
+      .column {
+        width: 100%;
+      }
+    }
+    @media screen and (max-width: 500px) {
+      .column3 {
+        width: 100%;
+      }
+    }
+    
+    /* Elegant Research Question Styling */
+    .research-question {
+        position: relative;
+        margin: 40px 0 30px;
+        padding-left: 25px;
+        font-size: 1.35rem;
+        font-weight: 500;
+        color: #2a3b4c;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 12px;
+    }
+    
+    .research-question::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 6px;
+        height: 70%;
+        background: linear-gradient(to bottom, #5364cc, #208799);
+        border-radius: 3px;
+    }
+    
+    .research-question .rq-number {
+        display: inline-block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #5364cc;
+        margin-right: 10px;
+        letter-spacing: 1px;
+    }
+</style>
+
+    <link rel="stylesheet" href="bootstrap-grid.css">
+
+    <script type="text/javascript" src="../js/hidebib.js"></script>
+        <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,600,400italic,600italic,300,300italic' rel='stylesheet' type='text/css'>
+        <head>
+            <!-- <title> Achieving Efficient Alignment through Learned Correction</title> -->
+            <title>J1: Exploring Simple Test-Time Scaling for LLM-as-a-Judge</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta property="og:description" content="J1: Exploring Simple Test-Time Scaling for LLM-as-a-Judge"/>
+            <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+            <meta name="twitter:title" content="J1: Exploring Simple Test-Time Scaling for LLM-as-a-Judge">
+            <meta name="twitter:description" content="J1: Exploring Simple Test-Time Scaling for LLM-as-a-Judge">
+            <meta name="twitter:image" content="">
+        </head>
+    
+     <body>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>J1: Exploring Simple Test-Time Scaling for LLM-as-a-Judge</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: "Times New Roman", 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1100px;
+        }
+        .paper-title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .authors {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .abstract {
+            margin-bottom: 30px;
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .section {
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+        .figure {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .figure img {
+            max-width: 100%;
+            height: auto;
+        }
+        .figure-caption {
+            margin-top: 10px;
+            text-align: center;
+            font-style: italic;
+        }
+        .quotebox {
+            background-color: #f0f0f0;
+            border-left: 5px solid #ccc;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 0.85em;
+        }
+        th, td {
+            padding: 4px 6px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            white-space: nowrap;
+        }
+        tr.header {
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            font-weight: bold;
+        }
+        tr.highlight {
+            background-color: rgb(194, 223, 255);
+        }
+        .delta {
+            font-size: 0.7em;
+            color: gray;
+        }
+        .ours {
+            font-size: 0.7em;
+            color: rgb(0, 64, 255);
+            font-weight: bold;
+        }
+        .neg {
+            font-size: 0.7em;
+            color: rgb(35, 153, 78);
+        }
+        tr.divider {
+            border-top: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="container">
+        <div class="paper-title">
+            <h1>J1: Exploring Simple Test-Time Scaling for LLM-as-a-Judge</h1>
+            <!-- <p style="font-size: 1.4rem; font-style: italic; color: #5364cc; margin-top: 0.5rem; margin-bottom: 1.5rem;">The mediocre teacher tells. The great teacher inspires.</p> -->
+        </div>
+
+        <div class="authors">
+            <p>Author Names</p>
+            <p>Affiliations</p>
+        </div>
+        <div style="height: 20px;"></div><!-- 空行 -->
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <style>
+            .button-container {
+              display: flex;
+              flex-wrap: wrap; /* 自动换行 */
+              gap: 10px; /* 按钮之间的间距 */
+              justify-content: center; /* 居中对齐 */
+            }
+        
+            .button {
+              display: flex;
+              flex-direction: column; /* 图标和文字上下排列 */
+              align-items: center; /* 水平居中 */
+              justify-content: center; /* 垂直居中 */
+              width: 100px; /* 固定宽度 */
+              height: 60px; /* 固定高度 */
+              text-decoration: none; /* 去掉下划线 */
+              background-color: #E8F9FF; /* 按钮背景颜色 */
+              color: #FBFBFB; /* 文本颜色 */
+              border-radius: 8px; /* 圆角 */
+              font-size: 16px; /* 文字大小 */
+              font-family: Arial, sans-serif; /* 字体 */
+              transition: transform 0.2s ease, background-color 0.2s ease; /* 动画效果 */
+            }
+        
+            .button:hover {
+              background-color: #4F75FF; /* 悬停背景颜色 */
+            color: #FBFBFB ;
+              transform: scale(1.05); /* 悬停放大效果 */
+            }
+        
+            .material-icons {
+              font-size: 24px; /* 图标大小 */
+              margin-bottom: 5px; /* 图标和文字之间的间距 */
+            }
+          </style>
+        </head>
+        <body>
+          <div class="button-container">
+            <a class="button" href="https://github.com/volcengine/verl" target="_blank">
+              <span class="material-icons">code</span>
+              github
+            </a>
+            <a class="button" href="https://huggingface.co/datasets/test-time-scaling/J1-SFT-53k" target="_blank">
+              <span class="material-icons">folder</span>
+              data
+            </a>
+            <a class="button" href="https://huggingface.co/test-time-scaling/J1_7B_RL" target="_blank">
+              <span class="material-icons">download</span>
+              model
+            </a>
+          </div>
+        
+        <!-- Image Carousel -->
+
+        <div class="abstract">
+            <h2 id="abstract">Abstract</h2>
+            <p>The current focus of AI research is shifting from emphasizing model training towards enhancing evaluation quality, a transition that is crucial for driving further
+              advancements in AI systems. Traditional evaluation methods typically rely on reward models assigning scalar preference scores to outputs. Although effective, such
+              approaches lack interpretability, leaving users often uncertain about why a reward
+              model rates a particular response as high or low. The advent of LLM-as-a-Judge
+              provides a more scalable and interpretable method of supervision, offering insights
+              into the decision-making process. Moreover, with the emergence of large reasoning
+              models, which consume more tokens for deeper thinking and answer refinement,
+              scaling test-time computation in the LLM-as-a-Judge paradigm presents an avenue
+              for further boosting performance and providing more interpretability through reasoning traces. In this paper, we introduce <b>J1-7B</b>, which is first supervised fine-tuned
+              on reflection-enhanced datasets collected via rejection-sampling and subsequently
+              trained using Reinforcement Learning (RL) with verifiable rewards. At inference
+              time, we apply Simple Test-Time Scaling (STTS) strategies for additional performance improvement. Experimental results demonstrate that <b>J1-7B</b> surpasses the
+              previous state-of-the-art LLM-as-a-Judge by <b>4.8%</b> and exhibits a <b>5.1%</b> stronger
+              scaling trend under STTS. Additionally, we present three key findings: (1) Existing
+              LLM-as-a-Judge does not inherently exhibit such scaling trend. (2) Model simply
+              fine-tuned on reflection-enhanced datasets continues to demonstrate similarly weak
+              scaling behavior. (3) Significant scaling trend emerges primarily during the RL
+              phase, suggesting that effective STTS capability is acquired predominantly through
+              RL training. We hope that our comprehensive analysis will provide insights to the
+              community and contribute to the broader AI alignment community, especially in
+              the context of developing more robust and scalable evaluation systems.</p>
+        </div>
+
+        <h2 id="why-stts">Why STTS for LLM-as-a-Judge?</h2>
+        <div class="figure">
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+                
+              <img src="./assets/teaser.jpg" alt="RLHF Concept" style="width: 100%; height: auto; object-fit: contain;">
+
+            </div>
+            <div class="figure-caption">
+                <p>The evolving landscape of model evaluation with three approaches: the Bradley-Terry Model, LLM-as-a-Judge with Parallel Decoding, and LLM-as-a-Judge enhanced with Simple Test-Time Scaling (STTS). Traditional models like Bradley-Terry offer a basic scalar approach but fall short in interpretability and scalability. In contrast, LLM-as-a-Judge, by leveraging the power of large language models, provides a more scalable and interpretable framework for evaluation.</p>
+            </div>
+        </div>
+
+        <div class="figure">
+          <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+              
+            <img src="./assets/distribution.jpg" alt="Distribution" style="width: 100%; height: auto; object-fit: contain;">
+
+          </div>
+          <div class="figure-caption">
+              <p>PCA results of original responses, parallel decoding responses, and STTS responses. The results show that parallel decoding responses are more similar to original responses, while STTS responses are more diverse compared to original responses. </p>
+          </div>
+      </div>
+
+        <style>
+            .image-carousel {
+              width: 100%;
+              max-width: 900px;
+              margin: 30px auto;
+              position: relative;
+              overflow: hidden;
+              border-radius: 10px;
+              box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            }
+            
+            .carousel-slides {
+              display: flex;
+              transition: transform 0.5s ease-in-out;
+              height: 450px;
+            }
+            
+            .carousel-slide {
+              min-width: 100%;
+              position: relative;
+            }
+            
+            .carousel-slide img {
+              width: 100%;
+              height: 450px;
+              object-fit: contain;
+              background-color: #f8f9fa;
+            }
+            
+            .carousel-controls {
+              position: absolute;
+              bottom: 15px;
+              left: 0;
+              right: 0;
+              display: flex;
+              justify-content: center;
+              gap: 10px;
+              z-index: 10;
+            }
+            
+            .carousel-dot {
+              width: 12px;
+              height: 12px;
+              border-radius: 50%;
+              background-color: rgba(255, 255, 255, 0.6);
+              border: 2px solid rgba(0, 0, 0, 0.3);
+              cursor: pointer;
+              transition: all 0.3s ease;
+            }
+            
+            .carousel-dot.active {
+              background-color: #4F75FF;
+              transform: scale(1.2);
+            }
+            
+            .carousel-arrow {
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 40px;
+              height: 40px;
+              background-color: rgba(255, 255, 255, 0.8);
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              font-size: 20px;
+              color: #333;
+              box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+              z-index: 10;
+              transition: all 0.3s ease;
+            }
+            
+            .carousel-arrow:hover {
+              background-color: rgba(255, 255, 255, 1);
+              transform: translateY(-50%) scale(1.1);
+            }
+            
+            .carousel-arrow.prev {
+              left: 15px;
+            }
+            
+            .carousel-arrow.next {
+              right: 15px;
+            }
+            
+            @media (max-width: 768px) {
+              .image-carousel {
+                max-width: 90%;
+                height: 100%;
+              }
+              .carousel-slides, .carousel-slide img {
+                height: 100%;
+              }
+            }
+          </style>
+          
+          
+
+        <div class="section">
+            <h2 id="introduction">Introduction</h2>
+            
+            <!-- <blockquote>
+                <p><b>"The mediocre teacher tells. The great teacher inspires."</b></p>
+                <footer>--- William Arthur Ward saying – Education</footer>
+            </blockquote> -->
+            
+            <p>Our work focuses on enhancing the reasoning ability of LLM-as-a-Judge, aiming to improve its decision-making process and the quality of its evaluations. To achieve this, we propose a novel method that integrates Simple Test-Time Scaling (STTS), which encourages the model to reflect on its initial judgments and refine its decisions.</p>
+
+            <p>The method begins with Supervised Fine-Tuning (SFT) to train the model on a carefully curated dataset. Specifically, we employ a rejection sampling technique to collect reasoning trajectories, ensuring that only those responses that initially seem incorrect, but are corrected through reflection, are retained. This iterative process helps the model to consider more detailed aspects of the responses, strengthening its decision-making capability.</p>
+               
+            <p>To further optimize performance, we introduce a Reinforcement Learning (RL) phase, where the model learns from feedback using a reward-based approach. The reward structure is designed to reinforce correct judgments, with a focus on improving interpretability and accuracy. Additionally, we incorporate a budget-forcing mechanism to elicit the reflective reasoning ability learned from above training process.</p>
+               
+            <p>Through this approach, we demonstrate how our method empowers LLM-as-a-Judge to make more informed, accurate, and interpretable decisions, enhancing its overall reasoning capacity.</p>
+        </div>
+        
+
+        
+        <div class="figure">
+          <div style="display: flex; justify-content: center; align-items: center; width: 100%;">
+              
+            <img src="./assets/pipeline.jpg" alt=Pipeline" style="width: 100%; height: auto; object-fit: contain;">
+
+          </div>
+          <div class="figure-caption">
+              <p>To encompass current model ability to do STTS, we propose a two-stage training pipeline. Firstly, we utilize reflection-enhanced rejection sampling to supervised fine-tuning a base model. Secondly, we use RL training to further elicit model's reasoning ability. After such pipeline, <b>J1-7B</b> demonstrate boosted performance and better scaling trend.</p>
+          </div>
+      </div>
+
+        <div class="section">
+            <h3 id="key-contributions">Key Contributions</h3>
+            <ul>
+                <li>We identify that existing LLM-as-a-Judge models trained solely on general judgment datasets
+                  exhibit limited scaling behavior under STTS, highlighting an important yet underexplored
+                  limitation in current frameworks.</li>
+                <li>We introduce a novel two-stage training paradigm, starting with a reflection-enhanced SFT
+                  dataset curated through rejection sampling, effectively initializing the LLM-as-a-Judge to
+                  optimally leverage reflective reasoning tokens introduced by STTS.</li>
+                <li>We demonstrate that further enhancements in scaling behavior emerge explicitly during
+                  the RL stage, indicating that the capability for effective reflective reasoning under STTS is
+                  actively learned and reinforced through RL process.</li>
+                <li>Empirically, we validate our proposed method by introducing <b>J1-7B</b> that surpasses previous
+                  state-of-the-art baselines. Specifically, <b>J1-7B</b> achieves a <b>4.8%</b> improvement in overall
+                  judgment performance and exhibits a <b>5.1%</b> stronger scaling trend under STTS, confirming
+                  the effectiveness and robustness of our proposed training methodology.</li>
+            </ul>
+        </div>
+
+
+        <div class="section">
+            <h2 id="main-results">Research Questions</h2>
+        </div>
+
+        <div class="section">
+            <h3 id="rq_1" class="research-question"><span class="rq-number">RQ 1</span>How does J1-7B perform compared to existing state-of-the-art models? </h3>
+        </div> 
+
+        <table>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>RewardBench</th>
+              <th>RewardMath</th>
+              <th>Anthropic Harmless</th>
+              <th>CodePrefBench</th>
+              <th>Overall</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Results of LLM-as-a-Judge (Proprietary or Larger Models) -->
+            <tr>
+              <td colspan="6"><strong>Results of LLM-as-a-Judge (Proprietary or Larger Models)</strong></td>
+            </tr>
+            <tr>
+              <td>GPT-4o</td>
+              <td>85.40</td>
+              <td>76.81</td>
+              <td>51.37</td>
+              <td>75.09</td>
+              <td>72.17</td>
+            </tr>
+            <tr>
+              <td>o1-mini</td>
+              <td>88.56</td>
+              <td>95.70</td>
+              <td>45.76</td>
+              <td>76.13</td>
+              <td>76.54</td>
+            </tr>
+            <tr>
+              <td>Gemini-2.0-flash</td>
+              <td>83.68</td>
+              <td>85.30</td>
+              <td>48.98</td>
+              <td>69.21</td>
+              <td>71.79</td>
+            </tr>
+            <tr>
+              <td>Deepseek-R1</td>
+              <td>82.83</td>
+              <td>98.21</td>
+              <td>53.31</td>
+              <td>79.49</td>
+              <td>78.46</td>
+            </tr>
+        
+            <!-- Results of Scalar Reward Models (Open Source with Comparable Size) -->
+            <tr>
+              <td colspan="6"><strong>Results of Scalar Reward Models (Open Source with Comparable Size)</strong></td>
+            </tr>
+            <tr>
+              <td>InternLM2-7B-Reward</td>
+              <td>88.18</td>
+              <td>78.05</td>
+              <td><b>71.76</b></td>
+              <td>62.48</td>
+              <td>75.12</td>
+            </tr>
+            <tr>
+              <td>Skywork-Reward-Llama3.1-8B</td>
+              <td><b>93.37</b></td>
+              <td>72.33</td>
+              <td>59.44</td>
+              <td>59.89</td>
+              <td>71.26</td>
+            </tr>
+            <tr>
+              <td>FsfairX-LLaMA3-8B</td>
+              <td>84.45</td>
+              <td>66.23</td>
+              <td>53.75</td>
+              <td>58.20</td>
+              <td>65.66</td>
+            </tr>
+        
+            <!-- Results of LLM-as-a-Judge (Open Source with Comparable Size) -->
+            <tr>
+              <td colspan="6"><strong>Results of LLM-as-a-Judge (Open Source with Comparable Size)</strong></td>
+            </tr>
+            <tr>
+              <td>Llama3.1-8B-Instruct</td>
+              <td>70.47</td>
+              <td>61.12</td>
+              <td>46.43</td>
+              <td>67.10</td>
+              <td>61.28</td>
+            </tr>
+            <tr>
+              <td>Qwen2.5-7B-Instruct</td>
+              <td>78.50</td>
+              <td>69.70</td>
+              <td>49.56</td>
+              <td>67.59</td>
+              <td>66.34</td>
+            </tr>
+            <tr>
+              <td>Skywork-Critic-Llama3.1-8B</td>
+              <td>88.86</td>
+              <td>66.51</td>
+              <td>58.61</td>
+              <td>60.57</td>
+              <td>68.64</td>
+            </tr>
+            <tr>
+              <td>RISE-Judge-Qwen2.5-7B</td>
+              <td>87.42</td>
+              <td>81.69</td>
+              <td>56.35</td>
+              <td>59.22</td>
+              <td>71.17</td>
+            </tr>
+        
+            <!-- Results of Our Models -->
+            <tr>
+              <td colspan="6"><strong>Results of Our Models</strong></td>
+            </tr>
+            <tr>
+              <td>J1-7B (SFT Only)</td>
+              <td>85.01</td>
+              <td>82.40</td>
+              <td>53.88</td>
+              <td>49.20</td>
+              <td>67.62</td>
+            </tr>
+            <tr>
+              <td>J1-7B (SFT + RL)</td>
+              <td>86.91</td>
+              <td><b>90.15</b></td>
+              <td>59.05</td>
+              <td><b>67.80</b></td>
+              <td><b>75.98</b></td>
+            </tr>
+          </tbody>
+        </table>
+        
+
+        <style>
+          table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+          }
+          
+          th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+          }
+          
+          th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+          }
+          
+          tr:nth-child(even) {
+            background-color: #f9f9f9;
+          }
+          
+          td[colspan] {
+            background-color: #e6f3ff;
+            font-weight: bold;
+            text-align: center;
+          }
+          </style>
+
+        <div class="section">
+            <h3 id="rq_2" class="research-question"><span class="rq-number">RQ 2</span>How does J1-7B perform under STTS settings?</h3>
+        </div>
+
+        <div class="figure">
+            <img src="./assets/scaling_trend.jpg" alt="scaling trend">
+            <div class="figure-caption">
+                <p>Comparison of J1-7B's performance under STTS settings. J1-7B shows superior scaling trend compared to other models.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3 id="rq_3" class="research-question"><span class="rq-number">RQ 3</span>What factors influence the performance of J1-7B during STTS?</h3>
+            
+            <div class="subsection">
+                <h4>3.1 Impact of Cold-start Dataset Composition</h4>
+                <div class="figure">
+                    <img src="./assets/cold_start.jpg" alt="Cold-start Dataset Analysis" style="width: 100%; height: auto; object-fit: contain;">
+                    <div class="figure-caption">
+                        <p>Analysis of how different compositions of the cold-start dataset affect model performance. We show that incorporating reasoning-intensive datasets into the cold-start dataset can both improve model performance and STTS scaling trend.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h4>3.2 Choice of RL Algorithm</h4>
+                <div class="figure">
+                    <img src="./assets/algorithm.jpg" alt="RL Algorithm Comparison" style="width: 100%; height: auto; object-fit: contain;">
+                    
+                    <div class="figure-caption">
+                        <p>Comparison of different RL algorithms and their impact on model performance. Typically, we find that GRPO shows inferior STTS scaling trend in overall. It might due to the response length of GRPO is significantly longer than other methods.</p>
+                    </div>
+                </div>
+
+                <div class="figure">
+                  <img src="./assets/reflection_frequency.jpg" alt="Reflection Frequency" style="width: 100%; height: auto; object-fit: contain;">
+                  
+                  <div class="figure-caption">
+                      <p>We also shows that GRPO's original reflection frequency is higher than other methods, thus further STTS that excessively increases the use of reflection words may negatively impact overall performance.</p>
+                  </div>
+                </div>
+                
+            </div>
+
+            <div class="subsection">
+                <h4>3.3 Training Stage Progression</h4>
+                <div class="figure">
+                    <img src="./assets/training_progress.jpg" alt="Training Progress Analysis" style="width: 100%; height: auto; object-fit: contain;">
+                    <div class="figure-caption">
+                        <p>Analysis of how model performance evolves through training progress. The results show that the most significant improvements in STTS capability emerge during the RL phase.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .subsection {
+                margin: 30px 0;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .subsection h4 {
+                color: #2a3b4c;
+                margin-bottom: 20px;
+                font-size: 1.2em;
+                font-weight: 600;
+            }
+            
+            .subsection .figure {
+                margin: 20px 0;
+            }
+            
+            .subsection .figure-caption {
+                margin-top: 15px;
+                color: #666;
+                font-style: italic;
+            }
+        </style>
+
+        <div class="subsection">
+          <h4>3.4 Case Study of J1-7B</h4>
+            <p>In this case study, we present examples where <span class="highlight-block-blue">Blue blocks</span> demonstrate correct answer while <span class="highlight-block-red">Red blocks</span> indicates wrong answer.</p>
+            <style>
+            .highlight-block-blue {
+              background-color: #0180ff;
+              color: #000000;
+              padding: 2px 8px;
+              border-radius: 3px;
+              display: inline-block;
+              margin: 0 2px;
+            }
+            .highlight-block-red {
+              background-color: #ff0000;
+              color: #000000;
+              padding: 2px 8px;
+              border-radius: 3px;
+              display: inline-block;
+              margin: 0 2px;
+            }
+          </style>
+          <div class="image-carousel">
+            <div class="carousel-slides">
+              <div class="carousel-slide">
+                <img src="./assets/1_1.jpg" alt="wrong2right 1">
+              </div>
+              <div class="carousel-slide">
+                <img src="./assets/1_2.jpg" alt="wrong2right 2">
+              </div>
+              <div class="carousel-slide">
+                <img src="./assets/2_1.jpg" alt="right2wrong 1">
+              </div>
+              <div class="carousel-slide">
+                <img src="./assets/2_2.jpg" alt="right2wrong 2">
+              </div>
+              <div class="carousel-slide">
+                <img src="./assets/3_1.jpg" alt="right2right 5">
+              </div>
+              <div class="carousel-slide">
+                <img src="./assets/3_2.jpg" alt="right2right 6">
+              </div>
+            </div>
+            
+            <div class="carousel-arrow prev">&#10094;</div>
+            <div class="carousel-arrow next">&#10095;</div>
+            
+            <div class="carousel-controls">
+              <div class="carousel-dot active"></div>
+              <div class="carousel-dot"></div>
+              <div class="carousel-dot"></div>
+              <div class="carousel-dot"></div>
+              <div class="carousel-dot"></div>
+              <div class="carousel-dot"></div>
+            </div>
+          </div>
+  
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              const slides = document.querySelector('.carousel-slides');
+              const dots = document.querySelectorAll('.carousel-dot');
+              const prevBtn = document.querySelector('.carousel-arrow.prev');
+              const nextBtn = document.querySelector('.carousel-arrow.next');
+              let currentIndex = 0;
+              const slideCount = document.querySelectorAll('.carousel-slide').length;
+              
+              // Auto slide functionality
+              let autoSlideInterval = setInterval(goToNextSlide, 50000);
+              
+              function goToSlide(index) {
+                // Reset interval when manually changing slides
+                clearInterval(autoSlideInterval);
+                autoSlideInterval = setInterval(goToNextSlide, 50000);
+                
+                currentIndex = index;
+                if (currentIndex < 0) currentIndex = slideCount - 1;
+                if (currentIndex >= slideCount) currentIndex = 0;
+                
+                slides.style.transform = `translateX(-${currentIndex * 100}%)`;
+                
+                // Update active dot
+                dots.forEach((dot, i) => {
+                  dot.classList.toggle('active', i === currentIndex);
+                });
+              }
+              
+              function goToNextSlide() {
+                goToSlide(currentIndex + 1);
+              }
+              
+              function goToPrevSlide() {
+                goToSlide(currentIndex - 1);
+              }
+              
+              // Event listeners
+              prevBtn.addEventListener('click', goToPrevSlide);
+              nextBtn.addEventListener('click', goToNextSlide);
+              
+              dots.forEach((dot, i) => {
+                dot.addEventListener('click', () => goToSlide(i));
+              });
+              
+              // Touch events for mobile
+              let touchStartX = 0;
+              let touchEndX = 0;
+              
+              const carousel = document.querySelector('.image-carousel');
+              
+              carousel.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+              });
+              
+              carousel.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+              });
+              
+              function handleSwipe() {
+                const swipeThreshold = 50;
+                if (touchEndX < touchStartX - swipeThreshold) {
+                  goToNextSlide();
+                } else if (touchEndX > touchStartX + swipeThreshold) {
+                  goToPrevSlide();
+                }
+              }
+            });
+          </script>
+        </div>
+          
+        </div>
+
+        
+        <!-- FAQ Section -->
+        <!-- <div class="section" id="qa">
+            <h2 id="faq">Frequently Asked Questions</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-chevron-down"></i>
+                        <h3>What is Generative RLHF-V?</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Generative RLHF-V is a novel alignment framework that integrates Generative Reward Models (GRMs) with multi-modal RLHF. It employs a two-stage pipeline: generative reward modeling from multi-modal preference and RL optimization from grouped comparison. This approach enables models to learn underlying principles from human preferences rather than just scalar scores.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-chevron-down"></i>
+                        <h3>How does Generative RLHF-V differ from traditional RLHF?</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Unlike traditional RLHF methods that only learn scalar scores from preferences, Generative RLHF-V enables models to learn the principles behind human preferences. Additionally, it enhances multi-modal RL scoring precision through grouped response comparison rather than individual response evaluation.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-chevron-down"></i>
+                        <h3>What performance improvements does Generative RLHF-V achieve?</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our experimental results show that Generative RLHF-V improves 4 MLLMs' performance across 7 benchmarks by an average of 18.1%, while baseline RLHF methods only achieve a 5.3% improvement. It elevates 2B and 3B MLLMs to 7B performance levels and enables open-source models to match closed-source experts.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-chevron-down"></i>
+                        <h3>What is reward hacking in the context of GRMs?</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Reward hacking occurs when models find ways to maximize rewards without achieving the intended goals. In our research, we discovered that MLLMs can develop self-praising behaviors to deceptively receive high rewards from GRMs. This behavior is also effective in misleading MLLM-as-judge benchmarks, highlighting a significant concern in current evaluation methods.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <i class="fas fa-chevron-down"></i>
+                        <h3>Where can I find the code and models?</h3>
+                    </div>
+                    <div class="faq-answer">
+                        <p>All our code, models, and evaluation details are available on our GitHub repository and Hugging Face. You can access them through the links provided in the buttons at the top of this page.</p>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Highlight active section in table of contents
+        document.addEventListener("DOMContentLoaded", function() {
+            const sections = document.querySelectorAll(".section h2, .section h3");
+            const navLinks = document.querySelectorAll("#table-of-contents a");
+            
+            window.addEventListener("scroll", function() {
+                let current = "";
+                
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if(pageYOffset >= sectionTop - 100) {
+                        current = section.getAttribute("id");
+                    }
+                });
+                
+                navLinks.forEach(link => {
+                    link.classList.remove("active-link");
+                    if(link.getAttribute("href") === "#" + current) {
+                        link.classList.add("active-link");
+                    }
+                });
+            });
+            
+            // Add toggle functionality for FAQ items
+            const faqQuestions = document.querySelectorAll('.faq-question');
+            
+            faqQuestions.forEach(question => {
+                question.addEventListener('click', () => {
+                    const faqItem = question.parentElement;
+                    faqItem.classList.toggle('active');
+                    
+                    const icon = question.querySelector('i');
+                    if (faqItem.classList.contains('active')) {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    } else {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
+            });
+        });
+    </script>
+    
+    <style>
+        /* FAQ Styles */
+        .faq-container {
+            max-width: 900px;
+            margin: 30px auto;
+        }
+        
+        .faq-item {
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            overflow: hidden;
+            background-color: #fff;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .faq-question {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s ease;
+        }
+        
+        .faq-question:hover {
+            background-color: #e9ecef;
+        }
+        
+        .faq-question h3 {
+            margin: 0 0 0 15px;
+            flex: 1;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .faq-question i {
+            color: #5364cc;
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.5s ease;
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 500px;
+        }
+        
+        /* Update table of contents to include FAQ */
+        #table-of-contents ul {
+            margin-bottom: 10px;
+        }
+    </style>
+</body>
+</html>
